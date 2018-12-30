@@ -1,0 +1,10 @@
+{
+    "name" : "phpbenchmarks/phalcon-common",
+    "license" : "proprietary",
+    "type" : "project",
+    "autoload" : {
+        "psr-4" : {
+            "PhpBenchmarksPhalcon\\RestApi\\" : ""
+        }
+    }
+}
