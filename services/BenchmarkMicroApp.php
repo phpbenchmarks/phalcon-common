@@ -3,6 +3,7 @@ namespace PhpBenchmarksPhalcon\RestApi\services;
 
 use Phalcon\Mvc\Micro;
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Http\Response;
 
 class BenchmarkMicroApp {
 	private $app;
@@ -17,7 +18,7 @@ class BenchmarkMicroApp {
 	protected function addRoutes(){
 		$self=$this;
 		$func=function() use($self){
-			$self->doStuff();
+			return $self->doStuff();
 		};
 		$this->app->get("/benchmark/rest", $func);
 		for($i=0;$i<500;$i++){
@@ -26,8 +27,11 @@ class BenchmarkMicroApp {
 	}
 	
 	protected function doStuff(){
-		
-		echo "Okay";
+		$response=new Response();
+		$response->setContentType('application/json', 'UTF-8');
+		$datas=(new Users())->serialize();
+		$response->setJsonContent($datas);
+		return $response;
 	}
 	
 	public function handle(){

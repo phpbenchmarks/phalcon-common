@@ -34,7 +34,6 @@ class Users{
 				$user = new ShadowUser($entity);
 				$result[] = $user->toArray();
 			}
-		}
 		return $result;
 	}
 
