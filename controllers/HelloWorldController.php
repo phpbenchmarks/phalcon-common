@@ -2,7 +2,7 @@
 namespace PhpBenchmarksPhalcon\HelloWorld\controllers;
 use Phalcon\Mvc\Controller;
 
-class HelloWorldController extends Controller{
+class HelloworldController extends Controller{
 
     public function indexAction(){
 		echo "Hello world !";
