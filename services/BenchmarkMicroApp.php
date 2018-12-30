@@ -4,15 +4,25 @@ namespace PhpBenchmarksPhalcon\RestApi\services;
 use Phalcon\Mvc\Micro;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Http\Response;
+use Phalcon\Events\Manager as EventsManager;
+use PhpBenchmarksPhalcon\RestApi\events\DefineLocaleEventListener;
 
-class BenchmarkMicroApp {
+/**
+ * Micro app for Phalcon benchmark on phpbenchmarks.com
+ * @author jc
+ * @version 1.0.0
+ */
+class BenchmarkMicroApp{
 	private $app;
 	private $di;
+	private $_eventsManager;
 	
 	public function __construct(){
 		$this->di = new FactoryDefault();
 		$this->app = new Micro($this->di);
 		$this->addRoutes();
+		$this->setTranslations();
+		$this->addEvents();
 	}
 	
 	protected function addRoutes(){
@@ -26,10 +36,22 @@ class BenchmarkMicroApp {
 		}
 	}
 	
+	protected function setTranslations(){
+		$trans=new Translator("fr_FR", "en");
+		$this->di->set('translator', $trans);
+	}
+	
+	protected function addEvents(){
+		$this->_eventsManager = new EventsManager();
+		$listener = new DefineLocaleEventListener();
+		$this->_eventsManager->attach(DefineLocaleEventListener::EVENT_NAME, $listener);
+	}
+	
 	protected function doStuff(){
 		$response=new Response();
 		$response->setContentType('application/json', 'UTF-8');
-		$datas=(new Users())->serialize();
+		$this->_eventsManager->fire(DefineLocaleEventListener::EVENT_NAME.':onLocaleChange',$this->di->get('translator'));
+		$datas=(new Users())->serialize($this->di);
 		$response->setJsonContent($datas);
 		return $response;
 	}
@@ -37,5 +59,6 @@ class BenchmarkMicroApp {
 	public function handle(){
 		$this->app->handle();
 	}
+
 }
 

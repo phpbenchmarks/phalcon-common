@@ -3,6 +3,7 @@ namespace PhpBenchmarksPhalcon\RestApi\services;
 
 use PhpBenchmarksRestData\Service;
 use PhpBenchmarksPhalcon\RestApi\models\ShadowUser;
+use Phalcon\DiInterface;
 
 /**
  * Service for collection of Users.
@@ -17,8 +18,9 @@ class Users{
 	/**
 	 * Serialized collection
 	 */
-	public function serialize(){
-		return $this->convert($this->users);
+	public function serialize(DiInterface $di){
+		$translator=$di->get("translator");
+		return $this->convert($this->users,$translator);
 	}
 
 	/**
@@ -28,10 +30,10 @@ class Users{
 	 * @param array $objects
 	 * @return array 
 	 */
-	private function convert(array $objects){
+	private function convert(array $objects,Translator $translator){
 		$result = [];
 			foreach ($objects as $entity){
-				$user = new ShadowUser($entity);
+				$user = new ShadowUser($entity,$translator);
 				$result[] = $user->toArray();
 			}
 		return $result;
