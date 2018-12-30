@@ -15,8 +15,9 @@ class BenchmarkMicroApp {
 	}
 	
 	protected function addRoutes(){
-		$func=function(){
-			$this->doStuff();
+		$self=$this;
+		$func=function() use($self){
+			$self->doStuff();
 		};
 		$this->app->get("/benchmark/rest", $func);
 		for($i=0;$i<500;$i++){
@@ -25,6 +26,7 @@ class BenchmarkMicroApp {
 	}
 	
 	protected function doStuff(){
+		
 		echo "Okay";
 	}
 	
