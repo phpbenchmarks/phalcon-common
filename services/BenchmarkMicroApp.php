@@ -11,6 +11,7 @@ class BenchmarkMicroApp {
 	public function __construct(){
 		$this->di = new FactoryDefault();
 		$this->app = new Micro($this->di);
+		$this->addRoutes();
 	}
 	
 	protected function addRoutes(){
