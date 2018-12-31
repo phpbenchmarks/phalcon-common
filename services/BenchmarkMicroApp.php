@@ -8,7 +8,7 @@ use Phalcon\Events\Manager as EventsManager;
 use PhpBenchmarksPhalcon\RestApi\events\DefineLocaleEventListener;
 
 /**
- * Micro app for Phalcon benchmark on phpbenchmarks.com
+ * Micro app for Rest-api Phalcon benchmark on phpbenchmarks.com
  * @author jc
  * @version 1.0.0
  */
@@ -25,6 +25,9 @@ class BenchmarkMicroApp{
 		$this->addEvents();
 	}
 	
+	/**
+	 * Creates 1+500 routes 
+	 */
 	protected function addRoutes(){
 		$self=$this;
 		$func=function() use($self){
@@ -36,17 +39,27 @@ class BenchmarkMicroApp{
 		}
 	}
 	
+	/**
+	 * Creates and inject the translator in the container 
+	 */
 	protected function setTranslations(){
 		$trans=new Translator("fr_FR", "en");
 		$this->di->set('translator', $trans);
 	}
 	
+	/**
+	 * Adds DefineLocalEventListener in app eventsManager 
+	 */
 	protected function addEvents(){
 		$this->_eventsManager = new EventsManager();
 		$listener = new DefineLocaleEventListener();
 		$this->_eventsManager->attach(DefineLocaleEventListener::EVENT_NAME, $listener);
 	}
 	
+	/**
+	 * Returns the json response
+	 * @return \Phalcon\Http\Response
+	 */
 	protected function doStuff(){
 		$response=new Response();
 		$response->setContentType('application/json', 'UTF-8');

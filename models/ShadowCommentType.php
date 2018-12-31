@@ -1,7 +1,8 @@
 <?php
 namespace PhpBenchmarksPhalcon\RestApi\models;
 /**
- * Shadow User with array conversion
+ * Shadow Commenttype with array conversion
+ * Inspired by phpbenchmarks/code-igniter-common
  */
 use PhpBenchmarksRestData\CommentType;
 use PhpBenchmarksPhalcon\RestApi\services\Translator;
@@ -9,18 +10,18 @@ use PhpBenchmarksPhalcon\RestApi\services\Translator;
 class ShadowCommentType extends CommentType{
 	private $translator;
 	
-	public function __construct($entity = null,Translator $translator=null){
+	public function __construct($entity,Translator $translator){
 		$this->translator=$translator;
 		if ( ! empty($entity)){
-			$this->setId($entity->getId());
-			$this->setName($entity->getName());
+			$this->id=$entity->getId();
+			$this->name=$entity->getName();
 		}
 	}
 
 	public function toArray(){
 		return [
-				'id' => $this->getId(),
-				'name' => $this->getName(),
+				'id' => $this->id,
+				'name' => $this->name,
 				'translated' => $this->translator->trans('translated.3000'),
 		];
 	}

@@ -7,7 +7,7 @@ use Phalcon\DiInterface;
 
 /**
  * Service for collection of Users.
- *
+ * Converts an array of Users in an array of array (with translation)
  */
 class Users{
 	private $users;

@@ -2,6 +2,7 @@
 namespace PhpBenchmarksPhalcon\RestApi\models;
 /**
  * Shadow User with array conversion and translations
+ * Inspired by phpbenchmarks/code-igniter-common
  */
 use PhpBenchmarksRestData\User;
 use PhpBenchmarksPhalcon\RestApi\services\Translator;
@@ -9,27 +10,26 @@ use PhpBenchmarksPhalcon\RestApi\services\Translator;
 class ShadowUser extends User{
 	private $translator;
 	
-	public function __construct($entity = null,Translator $translator=null){
+	public function __construct($entity,Translator $translator){
 		$this->translator=$translator;
 		if ( ! empty($entity)){
-			$this->setId($entity->getId());
-			$this->setLogin($entity->getLogin());
-			$this->setCreatedAt($entity->getCreatedAt());
-			foreach ($entity->getComments() as $comment)
-				$this->addComment($comment);
+			$this->id=$entity->getId();
+			$this->login=$entity->getLogin();
+			$this->createdAt=$entity->getCreatedAt();
+			$this->comments=$entity->getComments();
 		}
 	}
 
 	public function toArray(){
 		$comments = [];
-		foreach ($this->getComments() as $comment){
+		foreach ($this->comments as $comment){
 			$shadow = new ShadowComment($comment,$this->translator);
 			$comments[] = $shadow->toArray();
 		}
 		$result = [
-			'id'		 => $this->getId(),
-			'login'		 => $this->getLogin(),
-			'createdAt'	 => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+			'id'		 => $this->id,
+			'login'		 => $this->login,
+			'createdAt'	 => $this->createdAt->format('Y-m-d H:i:s'),
 			'translated' => $this->translator->trans('translated.1000'),
 			'comments'	 => $comments
 		];
